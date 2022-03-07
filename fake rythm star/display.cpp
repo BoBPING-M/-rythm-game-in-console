@@ -246,8 +246,8 @@ void printRecord(std::vector<Record> & rec)
 	int i = 1;
 	for (auto ptr = rec.begin(); ptr != rec.end(); ptr++)
 	{
-		cout << i++ << "등. " << (*ptr).name << endl;
-		cout << "점수 : " << (*ptr).rec << endl;
+		cout << i++ << "등. " << (*ptr).returnName() << endl;
+		cout << "점수 : " << (*ptr).returnRec() << endl;
 	}
 	while ((GetAsyncKeyState(VK_BACK) & 0x8001) != 0x8001)
 		continue;

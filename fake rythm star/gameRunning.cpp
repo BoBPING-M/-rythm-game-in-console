@@ -15,7 +15,7 @@
 
 extern bool gameIsRunning;
 
-void gameStart(const char * keys, std::vector<Record> rec)
+void gameStart(const char * keys, std::vector<Record> &rec)
 {
 	system("cls");
 	gameIsRunning = true;
@@ -65,5 +65,5 @@ void gameStart(const char * keys, std::vector<Record> rec)
 	gameIsRunning = false;
 
 	//기록 저장
-	writeRecord(name, score, rec);
+	writeRecord(score, rec);
 }
