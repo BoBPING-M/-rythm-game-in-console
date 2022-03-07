@@ -27,28 +27,6 @@ int main()
 	const char keys[6]{ 'S', 'D', 'F', 'J', 'K', 'L' }; //게임에 사용할 키 배열 변경 시 사용 키 변경 가능
 	std::vector<Record> rec; //기록 보관용
 	readRecord(rec);
-
-
-	/*using std::ios_base;
-	Record temp;
-	std::ifstream fin;
-	fin.open("D:\\OneDrive\\C++\\fake rythm star\\fake rythm star\\record\\record.dat", ios_base::in | ios_base::binary);
-	if (!fin.is_open())
-	{
-		std::cerr << "파일이 열리지 않음";
-		exit(EXIT_FAILURE);
-	}
-	while (!fin.eof())
-	{
-		fin.read((char*)&(temp.name), sizeof(temp.name));
-		fin.read((char*)&(temp.rec), sizeof(temp.rec));
-		if (fin.eof())
-			break;
-		rec.push_back(temp);
-	}
-	fin.close();*/
-
-
 	printMainScreen();
 	while (true) //메인메뉴 선택
 	{
