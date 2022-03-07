@@ -17,15 +17,46 @@ bool Record::inputInfo(int score)
 	using std::cin;
 	using std::endl;
 	std::string temp_n;
-	cout << "이름 입력 : ";
+	setInputPo(xSize / 2 - 5, ySize / 2 - 1);
+	cout << "당신의 점수 : " << score;
+	setInputPo(xSize / 2 - 5, ySize / 2 + 1);
+	cout << "Press Enter!";
+	FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE)); //GetAsyncKeyState 버퍼 비워줌
+	while (cin.get() != '\n')
+	{
+		continue;
+	}
+	for (int i = xSize / 2 - 5; i != xSize; i++)
+	{
+		setInputPo(i, ySize / 2-1);
+		cout << ' ';
+		setInputPo(i, ySize / 2 + 1);
+		cout << ' ';
+	}
+	setInputPo(xSize / 2 - 5, ySize / 2);
+	cout << "이름 입력(3글자) : ";
 	std::getline(cin, temp_n);
 	if (temp_n.length() != MAX_NAME_LEN)
+	{
+		for (int i = xSize / 2 - 5; i != xSize; i++)
+		{
+			setInputPo(i, ySize / 2);
+			cout << ' ';
+		}
+		setInputPo(0, ySize + 1);
 		return false;
+	}
 	else
 	{
 		name = temp_n;
 		name.resize(MAX_NAME_LEN + 1);
 		rec = score;
+		for (int i = xSize / 2 - 5; i != xSize; i++)
+		{
+			setInputPo(i, ySize / 2);
+			cout << ' ';
+		}
+		setInputPo(0, ySize + 1);
 		return true;
 	}
 }

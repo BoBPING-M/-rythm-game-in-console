@@ -4,7 +4,7 @@
 #include "record.h"
 
 
-void gameStart(const char* keys, std::vector<Record> &rec);
+void gameStart(char* keys, std::vector<Record> &rec);
 
 
 #endif // !GR_H_

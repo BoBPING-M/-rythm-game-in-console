@@ -15,7 +15,7 @@
 
 extern bool gameIsRunning;
 
-void gameStart(const char * keys, std::vector<Record> &rec)
+void gameStart(char * keys, std::vector<Record> &rec)
 {
 	system("cls");
 	gameIsRunning = true;
@@ -40,6 +40,7 @@ void gameStart(const char * keys, std::vector<Record> &rec)
 	printBackGround();
 	printScore(score);
 	printLife(lf);
+	printKeys(keys);
 	m.unlock();
 	printWait();
 

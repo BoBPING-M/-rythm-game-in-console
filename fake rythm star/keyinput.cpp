@@ -15,11 +15,13 @@ extern bool gameIsRunning;
 
 void keyInput(std::list<Block*>* nw, int ix, int& score, int& combo, char k, std::mutex& m, Life& lf)
 {
+	clock_t printKeyTime = LONG_MAX;
 	Mci* boom = setBoom((LPCWSTR)L"D:\\OneDrive\\C++\\fake rythm star\\fake rythm star\\effectS\\Boom.mp3");
 	juge jg = juge::nope;
 	while (1)
 	{
 		m.lock();
+		deletePrintKeyInput(printKeyTime, ix);
 		if (gameIsRunning == false)
 		{
 			m.unlock();
@@ -29,6 +31,7 @@ void keyInput(std::list<Block*>* nw, int ix, int& score, int& combo, char k, std
 		if ((GetAsyncKeyState(k) & 0x8001) == 0x8001) //k로 전달된 문자와 ix로 전달된 인덱스 값을 이용해 게임 중 동작 시행
 		{
 			m.lock(); //같은 메모리 사용때문에 락
+			printKeyTime = printKeyInput(ix);
 			if (boom->mp->dwFrom != 0) //만약 노래가 시작지점이 아니라면
 			{
 				goToStartBoom(boom->mo->wDeviceID, boom->ms); //시작 지점으로 이동하라

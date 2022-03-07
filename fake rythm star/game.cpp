@@ -24,7 +24,7 @@ int main()
 	gameIsRunning = false;
 	system("mode con: cols=80 lines=35");
 	std::wcout.imbue(std::locale("korean")); //유니코드 로케일 변경
-	const char keys[6]{ 'S', 'D', 'F', 'J', 'K', 'L' }; //게임에 사용할 키 배열 변경 시 사용 키 변경 가능
+	char keys[6]{ 'S', 'D', 'F', 'J', 'K', 'L' }; //게임에 사용할 키 배열 변경 시 사용 키 변경 가능
 	std::vector<Record> rec; //기록 보관용
 	readRecord(rec);
 	printMainScreen();

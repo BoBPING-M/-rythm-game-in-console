@@ -113,7 +113,7 @@ void printBackGround()
 		setInputPo(xSize, i);
 		std::wcout << L"│";
 	}
-	setInputPo(2, ySize-2);
+	setInputPo(2, ySize - 2);
 	std::wcout << L"─";
 	setInputPo(xSize - 1, ySize - 2);
 	std::wcout << L"─";
@@ -214,16 +214,18 @@ void printMainScreen()
 	using std::cout;
 	using std::endl;
 	system("cls"); //메인 화면 출력 전 초기화
-	setInputPo(xSize / 2 - 4, ySize / 2 - 10);
+	setInputPo(xSize / 2, ySize / 2 - 10);
 	cout << "조잡한 리듬게임";
-	setInputPo(xSize / 2 - 4, ySize / 2 - 6);
+	setInputPo(xSize / 2, ySize / 2 - 6);
 	cout << "1.게임 시작\n";
-	setInputPo(xSize / 2 - 4, ySize / 2 - 4);
+	setInputPo(xSize / 2, ySize / 2 - 4);
 	cout << "2.게임 설명\n";
-	setInputPo(xSize / 2 - 4, ySize / 2 - 2);
+	setInputPo(xSize / 2, ySize / 2 - 2);
 	cout << "3.기록 보기\n";
-	setInputPo(xSize / 2 - 4, ySize / 2);
-	cout << "종료";
+	setInputPo(xSize / 2, ySize / 2);
+	cout << "<- 종료";
+	setInputPo(xSize / 2 - 2, ySize / 2 + 5);
+	cout << "해당 메뉴 키 입력";
 	setInputPo(0, ySize + 1);
 }
 
@@ -277,4 +279,33 @@ void printWait()
 	setInputPo(xSize / 2 - 3, ySize / 2);
 	std::cout << "      ";
 	setInputPo(0, ySize+1);
+}
+
+void printKeys(char key[6])
+{
+	for (int i = 0; i < 6; i++)
+	{
+		setInputPo(9 * (i+1) - 1, ySize + 1);
+		std::cout << key[i];
+	}
+	setInputPo(0, ySize + 1);
+}
+
+clock_t printKeyInput(int ix)
+{
+	setInputPo(9 * ix + 4, ySize + 2);
+	std::cout << "■■■■";
+	setInputPo(0, ySize + 1);
+	return clock();
+}
+
+void deletePrintKeyInput(clock_t &st, int ix)
+{
+	if (clock() - st > 120)
+	{
+		setInputPo(9 * ix + 4, ySize + 2);
+		std::cout << "        ";
+		setInputPo(0, ySize + 1);
+		st = LONG_MAX;
+	}
 }
