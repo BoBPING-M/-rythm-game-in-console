@@ -12,15 +12,36 @@
 #include "life.h"
 #include "gameRunning.h"
 #include "record.h"
+#include <tchar.h>
+#include <WinUser.h>
 
-
-
+CONST TCHAR* lpszClass = _T("Consol Test!\n");
+HWND winhwnd;
+HINSTANCE hinstance;
 
 bool gameIsRunning = false;
 
 int main()
 {
 	using std::thread;
+
+	WNDCLASS wndclass;
+	SetConsoleTitle(lpszClass);
+	hinstance = GetModuleHandle(NULL);
+
+	wndclass.cbClsExtra = 0;
+	wndclass.cbWndExtra = 0;
+	wndclass.hbrBackground = NULL;
+	wndclass.hCursor = NULL;
+	wndclass.hIcon = NULL;
+	wndclass.hInstance = hinstance;
+	wndclass.lpfnWndProc = WndProc;
+	wndclass.lpszClassName = lpszClass;
+	wndclass.lpszMenuName = NULL;
+	wndclass.style = NULL;
+	RegisterClass(&wndclass);
+	winhwnd = CreateWindow(lpszClass, lpszClass, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, (HMENU)NULL, hinstance, NULL);
+
 	gameIsRunning = false;
 	system("mode con: cols=80 lines=35");
 	std::wcout.imbue(std::locale("korean")); //유니코드 로케일 변경
@@ -64,3 +85,4 @@ int main()
 	}
 	return 0;
 }
+

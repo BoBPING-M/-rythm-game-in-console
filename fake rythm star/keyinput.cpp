@@ -32,10 +32,8 @@ void keyInput(std::list<Block*>* nw, int ix, int& score, int& combo, char k, std
 		{
 			m.lock(); //같은 메모리 사용때문에 락
 			printKeyTime = printKeyInput(ix);
-			if (boom->mp->dwFrom != 0) //만약 노래가 시작지점이 아니라면
-			{
-				goToStartBoom(boom->mo->wDeviceID, boom->ms); //시작 지점으로 이동하라
-			}
+			goToStartBoom(boom->mo->wDeviceID, boom->ms); //효과음 시작 지점으로 이동하라
+			
 			if (nw[ix].size() != 0)
 			{
 				Block* temp = *(nw[ix].begin()); //없앨 블록 임시 저장소

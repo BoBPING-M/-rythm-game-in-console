@@ -14,7 +14,7 @@
 #include "record.h"
 
 extern bool gameIsRunning;
-
+extern HWND winhwnd;
 void gameStart(char * keys, std::vector<Record> &rec)
 {
 	system("cls");
@@ -28,6 +28,7 @@ void gameStart(char * keys, std::vector<Record> &rec)
 	blist now[6]; //현재 블럭 라인별 리스트
 	wblist wait[6]; //대기 블럭 라인별 리스트
 	std::string name = "MSG"; //이번 게임 이름
+	MSG msg;
 
 	readBlock("data.dat", wait);
 	std::mutex m; //쓰레드들의 데이터 침범?을 막기위한 뮤텍스
@@ -45,14 +46,28 @@ void gameStart(char * keys, std::vector<Record> &rec)
 	printWait();
 
 	setBgm();
+	int a = 1;
 	playingBgm();
 	//게임 시작
+
+	//std::thread gameDone(getMsg, std::ref(msg), std::ref(m));
 	for (int i = 0; i < 6; i++)
 	{
 		key.push_back(std::thread(keyInput, now, i, std::ref(score), std::ref(combo), keys[i], std::ref(m), std::ref(lf))); //각 키별 쓰레드 생성 및 작동
 		playing.push_back(std::thread(movePrint, now, i, std::ref(score), std::ref(combo), std::ref(m), std::ref(lf))); //속도에 따른 블록 이동 스레드
 		making.push_back(std::thread(GoBlock, now, wait, i, std::ref(m)));
 	}
+
+	while (GetMessage(&msg, winhwnd, 0, 0))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+		if (gameIsRunning == false)
+		{
+			break;
+		}
+	}
+
 
 	//게임 종료
 	for (int i = 0; i < 6; i++)//쓰레드 종료
@@ -61,6 +76,7 @@ void gameStart(char * keys, std::vector<Record> &rec)
 		key[i].join();
 		playing[i].join(); //종료가 안됨 1번부터
 	}
+	//gameDone.join();
 	stopBgm();
 	resetBgm();
 	gameIsRunning = false;
