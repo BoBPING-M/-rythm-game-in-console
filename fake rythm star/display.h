@@ -29,6 +29,7 @@ void printRecord(std::vector<Record> & rec);
 void printDie();
 void printWait();
 void printKeys(char key[6]);
+void printSetting(char* keys);
 clock_t printKeyInput(int ix); //키 입력시 효과 반환값은 효과를 없애기 위한 시간 비교용
 void deletePrintKeyInput(clock_t& st, int ix); //매개변수로 전달된 효과 생성 시간과 현재 시간을 비교해 60클럭이 넘으면 효과 삭제
 #endif // !DISP_H_

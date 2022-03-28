@@ -80,6 +80,11 @@ int main()
 			printRecord(rec);
 			printMainScreen();
 		}
+		if ((GetAsyncKeyState('4') & 0x8001) == 0x8001) //키 변경
+		{
+			printSetting(keys);
+			printMainScreen();
+		}
 		if ((GetAsyncKeyState(VK_BACK) & 0x8001) == 0x8001) //게임 종료시, 뒤로가기
 			break;
 	}

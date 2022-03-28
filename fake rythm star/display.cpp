@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <mutex>
 #include <vector>
+#include <string>
+#include <iomanip>
 #include "record.h"
 #include "display.h"
 #include "block.h"
@@ -214,17 +216,19 @@ void printMainScreen()
 	using std::cout;
 	using std::endl;
 	system("cls"); //메인 화면 출력 전 초기화
-	setInputPo(xSize / 2, ySize / 2 - 10);
+	setInputPo(79 / 2 - 6, 34 / 2 - 10);
 	cout << "조잡한 리듬게임";
-	setInputPo(xSize / 2, ySize / 2 - 6);
+	setInputPo(79 / 2 - 5, 34 / 2 - 6);
 	cout << "1.게임 시작\n";
-	setInputPo(xSize / 2, ySize / 2 - 4);
+	setInputPo(79 / 2 - 5, 34 / 2 - 4);
 	cout << "2.게임 설명\n";
-	setInputPo(xSize / 2, ySize / 2 - 2);
+	setInputPo(79 / 2 - 5, 34 / 2 - 2);
 	cout << "3.기록 보기\n";
-	setInputPo(xSize / 2, ySize / 2);
+	setInputPo(79 / 2 - 5, 34 / 2);
+	cout << "4.키   변경\n";
+	setInputPo(79 / 2 - 3, 34 / 2 + 2);
 	cout << "<- 종료";
-	setInputPo(xSize / 2 - 2, ySize / 2 + 5);
+	setInputPo(79 / 2 - 8, 34 / 2 + 9);
 	cout << "해당 메뉴 키 입력";
 	setInputPo(0, ySize + 1);
 }
@@ -234,8 +238,15 @@ void printInfo()
 	using std::cout;
 	using std::endl;
 	system("cls");
-	cout << "정보창\n";
-	cout << "정보가 있을예정\n";
+	std::string title = "게임 설명";
+	std::string toMain = "<- 메인메뉴로";
+	std::string descripton = "설명 귀찮아";
+	setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
+	cout << title;
+	setInputPo(79 - toMain.length(), 34);
+	cout << toMain;
+	setInputPo(79/2 - descripton.length(), 34 / 2);
+	cout << descripton;
 	while ((GetAsyncKeyState(VK_BACK) & 0x8001) != 0x8001)
 		continue;
 }
@@ -245,14 +256,55 @@ void printRecord(std::vector<Record> & rec)
 	using std::cout;
 	using std::endl;
 	system("cls");
-	int i = 1;
-	for (auto ptr = rec.begin(); ptr != rec.end(); ptr++)
+	const int LISTSIZE = 15; //한 화면에 표시할 랭크 갯수
+	int listSize = rec.size() / LISTSIZE + 1; //총 페이지 수
+	int rank = 1; //등수
+	std::string title = "점수표";
+	std::string toMain = "<- 메인메뉴로";
+	setInputPo(79/2 - ((title.length() / 2) * 2), 2);
+	cout << title;
+	setInputPo(79 - toMain.length(), 34);
+	cout << toMain;
+	for (int i = 0; i < listSize; i++)
 	{
-		cout << i++ << "등. " << (*ptr).returnName() << endl;
-		cout << "점수 : " << (*ptr).returnRec() << endl;
+		for (int n = 0; n < LISTSIZE; n++)
+		{
+			setInputPo(79 / 2 - 8, 2*n + 4);
+			cout << rank++ << "등. " << rec[(LISTSIZE * i) + n].returnName();
+			setInputPo(79 / 2 - 8, 2*n + 5);
+			cout << "점수 : " << rec[(LISTSIZE * i) + n].returnRec();
+			if ((LISTSIZE * i) + n == rec.size())
+				break;
+		}
+		while (true)
+		{
+			if ((GetAsyncKeyState(VK_PRIOR) & 0x8001) == 0x8001) //페이지 업키 입력 (앞장으로 넘기기)
+			{
+				if (i > 0) //첫페이지가 아닐경우
+				{
+					rank =  (i-1) * LISTSIZE + 1;
+					i -= 2;
+					break;
+				}
+				else //첫페이지 일경우
+					continue;
+			}
+			if ((GetAsyncKeyState(VK_NEXT) & 0x8001) == 0x8001) //페이지 다운키 입력 (뒷장으로 넘기기)
+			{
+				if (i != listSize - 1) //마지막 페이지가 아닐경우
+					break;
+				else //마지막 페이지일 경우
+					continue;
+			}
+			if ((GetAsyncKeyState(VK_BACK) & 0x8001) == 0x8001) //뒤로가기
+				return;
+		}
+		system("cls");
+		setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
+		cout << title;
+		setInputPo(79 - toMain.length(), 34);
+		cout << toMain;
 	}
-	while ((GetAsyncKeyState(VK_BACK) & 0x8001) != 0x8001)
-		continue;
 }
 
 void printDie()
@@ -307,5 +359,179 @@ void deletePrintKeyInput(clock_t &st, int ix)
 		std::cout << "        ";
 		setInputPo(0, ySize + 1);
 		st = LONG_MAX;
+	}
+}
+
+void printSetting(char* keys)
+{
+	using std::cout;
+	using std::endl;
+	using std::cin;
+	system("cls");
+	const char* KORNUM[6] = { "첫", "두", "세", "네", "다섯", "여섯" };
+	std::string title = "키변경";
+	std::string toMain = "<- 메인메뉴로";
+	std::string descripton = "바꿀 키를 누르세요";
+	setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
+	cout << title;
+	setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
+	cout << descripton;
+	setInputPo(79 - toMain.length(), 34);
+	cout << toMain;
+	for (int i = 0; i < 6; i++)
+	{
+		setInputPo(79 / 2 - 18, 2*i + 8);
+		cout << std::right<< std::setw(10)<< KORNUM[i] << "번째 키 : " << keys[i];
+	}
+	while (true)
+	{
+		if ((GetAsyncKeyState(keys[0]) & 0x8001) == 0x8001)
+		{
+			system("cls");
+			setInputPo(79 / 2 - 12, 34 / 2);
+			FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+			cout << "변경할 키 입력 : ";
+			keys[0] = cin.get();
+			if (islower(keys[0]))
+				keys[0] = toupper(keys[0]);
+			while (cin.get() != '\n')
+				continue;
+			system("cls");
+			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
+			cout << title;
+			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
+			cout << descripton;
+			setInputPo(79 - toMain.length(), 34);
+			cout << toMain;
+			for (int i = 0; i < 6; i++)
+			{
+				setInputPo(79 / 2 - 18, 2 * i + 8);
+				cout << std::right << std::setw(10) << KORNUM[i] << "번째 키 : " << keys[i];
+			}
+		}
+		if ((GetAsyncKeyState(keys[1]) & 0x8001) == 0x8001)
+		{
+			system("cls");
+			setInputPo(79 / 2 - 12, 34 / 2);
+			FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+			cout << "변경할 키 입력 : ";
+			keys[1] = cin.get();
+			if (islower(keys[1]))
+				keys[1] = toupper(keys[1]);
+			while (cin.get() != '\n')
+				continue;
+			system("cls");
+			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
+			cout << title;
+			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
+			cout << descripton;
+			setInputPo(79 - toMain.length(), 34);
+			cout << toMain;
+			for (int i = 0; i < 6; i++)
+			{
+				setInputPo(79 / 2 - 18, 2 * i + 8);
+				cout << std::right << std::setw(10) << KORNUM[i] << "번째 키 : " << keys[i];
+			}
+		}
+		if ((GetAsyncKeyState(keys[2]) & 0x8001) == 0x8001)
+		{
+			system("cls");
+			setInputPo(79 / 2 - 12, 34 / 2);
+			FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+			cout << "변경할 키 입력 : ";
+			keys[2] = cin.get();
+			if (islower(keys[2]))
+				keys[2] = toupper(keys[2]);
+			while (cin.get() != '\n')
+				continue;
+			system("cls");
+			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
+			cout << title;
+			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
+			cout << descripton;
+			setInputPo(79 - toMain.length(), 34);
+			cout << toMain;
+			for (int i = 0; i < 6; i++)
+			{
+				setInputPo(79 / 2 - 18, 2 * i + 8);
+				cout << std::right << std::setw(10) << KORNUM[i] << "번째 키 : " << keys[i];
+			}
+		}
+		if ((GetAsyncKeyState(keys[3]) & 0x8001) == 0x8001)
+		{
+			system("cls");
+			setInputPo(79 / 2 - 12, 34 / 2);
+			FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+			cout << "변경할 키 입력 : ";
+			keys[3] = cin.get();
+			if (islower(keys[3]))
+				keys[3] = toupper(keys[3]);
+			while (cin.get() != '\n')
+				continue;
+			system("cls");
+			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
+			cout << title;
+			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
+			cout << descripton;
+			setInputPo(79 - toMain.length(), 34);
+			cout << toMain;
+			for (int i = 0; i < 6; i++)
+			{
+				setInputPo(79 / 2 - 18, 2 * i + 8);
+				cout << std::right << std::setw(10) << KORNUM[i] << "번째 키 : " << keys[i];
+			}
+		}
+		if ((GetAsyncKeyState(keys[4]) & 0x8001) == 0x8001)
+		{
+			system("cls");
+			setInputPo(79 / 2 - 12, 34 / 2);
+			FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+			cout << "변경할 키 입력 : ";
+			keys[4] = cin.get();
+			if (islower(keys[4]))
+				keys[4] = toupper(keys[4]);
+			while (cin.get() != '\n')
+				continue;
+			system("cls");
+			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
+			cout << title;
+			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
+			cout << descripton;
+			setInputPo(79 - toMain.length(), 34);
+			cout << toMain;
+			for (int i = 0; i < 6; i++)
+			{
+				setInputPo(79 / 2 - 18, 2 * i + 8);
+				cout << std::right << std::setw(10) << KORNUM[i] << "번째 키 : " << keys[i];
+			}
+		}
+		if ((GetAsyncKeyState(keys[5]) & 0x8001) == 0x8001)
+		{
+			system("cls");
+			setInputPo(79 / 2 - 12, 34 / 2);
+			FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+			cout << "변경할 키 입력 : ";
+			keys[5] = cin.get();
+			if (islower(keys[5]))
+				keys[5] = toupper(keys[5]);
+			while (cin.get() != '\n')
+				continue;
+			system("cls");
+			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
+			cout << title;
+			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
+			cout << descripton;
+			setInputPo(79 - toMain.length(), 34);
+			cout << toMain;
+			for (int i = 0; i < 6; i++)
+			{
+				setInputPo(79 / 2 - 18, 2 * i + 8);
+				cout << std::right << std::setw(10) << KORNUM[i] << "번째 키 : " << keys[i];
+			}
+		}
+		if ((GetAsyncKeyState(VK_BACK) & 0x8001) == 0x8001)
+		{
+			return;
+		}
 	}
 }
