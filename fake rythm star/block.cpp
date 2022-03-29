@@ -16,23 +16,23 @@ juge Block::putScore(clock_t inputT, int& score, int& combo)
 		combo = 0;
 		return juge::fail;
 	}
-	clock_t timeDif = abs(inputT - (spawnTime + speed * (ySize - 2))); //입력시간과 블록생성 도착시간간 차이 절댓값
-	if (timeDif < speed * 2)
+	clock_t timeDif = abs(inputT - (spawnTime + speed * (ySize - 3))); //입력시간과 블록생성 도착시간간 차이 절댓값
+	if (timeDif < speed * 2.5)
 	{
 		score += (100 + (++combo / 10));
 		return juge::per;
 	}
-	else if (timeDif < speed * 2.5)
+	else if (timeDif < speed * 3)
 	{
 		score += (75 + (++combo / 3));
 		return juge::exc;
 	}
-	else if (timeDif < speed * 3)
+	else if (timeDif < speed * 3.5)
 	{
 		score += (50 + (++combo / 20));
 		return juge::goo;
 	}
-	else if (timeDif < speed * 3.5)
+	else if (timeDif < speed * 4)
 	{
 		++combo;
 		score += (25);

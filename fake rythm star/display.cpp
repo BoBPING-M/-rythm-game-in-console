@@ -115,9 +115,9 @@ void printBackGround()
 		setInputPo(xSize, i);
 		std::wcout << L"│";
 	}
-	setInputPo(2, ySize - 2);
+	setInputPo(2, ySize - 3);
 	std::wcout << L"─";
-	setInputPo(xSize - 1, ySize - 2);
+	setInputPo(xSize - 1, ySize - 3);
 	std::wcout << L"─";
 	setInputPo(1, ySize);
 	std::wcout << L"└";
