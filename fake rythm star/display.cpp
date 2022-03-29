@@ -261,20 +261,25 @@ void printRecord(std::vector<Record> & rec)
 	int rank = 1; //등수
 	std::string title = "점수표";
 	std::string toMain = "<- 메인메뉴로";
-	setInputPo(79/2 - ((title.length() / 2) * 2), 2);
+	std::string descripton2 = "PG UP : 이전 페이지 | PG DN : 다음 페이지";
+	setInputPo(79/2 - ((title.length() / 2) * 2), 1);
 	cout << title;
 	setInputPo(79 - toMain.length(), 34);
 	cout << toMain;
+	setInputPo(0, 34);
+	std::cout << descripton2;
+	setInputPo(79 - toMain.length() - 8, 34);
+	std::cout << "1 / " << listSize;
 	for (int i = 0; i < listSize; i++)
 	{
 		for (int n = 0; n < LISTSIZE; n++)
 		{
-			setInputPo(79 / 2 - 8, 2*n + 4);
-			cout << rank++ << "등. " << rec[(LISTSIZE * i) + n].returnName();
-			setInputPo(79 / 2 - 8, 2*n + 5);
-			cout << "점수 : " << rec[(LISTSIZE * i) + n].returnRec();
 			if ((LISTSIZE * i) + n == rec.size())
 				break;
+			setInputPo(79 / 2 - 8, 2*n + 3);
+			cout << rank++ << "등. " << rec[(LISTSIZE * i) + n].returnName();
+			setInputPo(79 / 2 - 8, 2*n + 4);
+			cout << "점수 : " << rec[(LISTSIZE * i) + n].returnRec();
 		}
 		while (true)
 		{
@@ -283,6 +288,15 @@ void printRecord(std::vector<Record> & rec)
 				if (i > 0) //첫페이지가 아닐경우
 				{
 					rank =  (i-1) * LISTSIZE + 1;
+					system("cls");
+					setInputPo(79 / 2 - ((title.length() / 2) * 2), 1);
+					cout << title;
+					setInputPo(79 - toMain.length(), 34);
+					cout << toMain;
+					setInputPo(0, 34);
+					std::cout << descripton2;
+					setInputPo(79 - toMain.length() - 8, 34);
+					std::cout << i << " / " << listSize;
 					i -= 2;
 					break;
 				}
@@ -292,18 +306,24 @@ void printRecord(std::vector<Record> & rec)
 			if ((GetAsyncKeyState(VK_NEXT) & 0x8001) == 0x8001) //페이지 다운키 입력 (뒷장으로 넘기기)
 			{
 				if (i != listSize - 1) //마지막 페이지가 아닐경우
+				{
+					system("cls");
+					setInputPo(79 / 2 - ((title.length() / 2) * 2), 1);
+					cout << title;
+					setInputPo(79 - toMain.length(), 34);
+					cout << toMain;
+					setInputPo(0, 34);
+					std::cout << descripton2;
+					setInputPo(79 - toMain.length() - 8, 34);
+					std::cout << i + 2 << " / " << listSize;
 					break;
+				}
 				else //마지막 페이지일 경우
 					continue;
 			}
 			if ((GetAsyncKeyState(VK_BACK) & 0x8001) == 0x8001) //뒤로가기
 				return;
 		}
-		system("cls");
-		setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
-		cout << title;
-		setInputPo(79 - toMain.length(), 34);
-		cout << toMain;
 	}
 }
 
@@ -362,6 +382,19 @@ void deletePrintKeyInput(clock_t &st, int ix)
 	}
 }
 
+void printSettingDescrip()
+{
+	std::string title = "키변경";
+	std::string toMain = "<- 메인메뉴로";
+	std::string descripton1 = "바꿀 키를 누르세요";
+	setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
+	std::cout << title;
+	setInputPo(79 / 2 - ((descripton1.length() / 2)) - 3, 6);
+	std::cout << descripton1;
+	setInputPo(79 - toMain.length(), 34);
+	std::cout << toMain;
+}
+
 void printSetting(char* keys)
 {
 	using std::cout;
@@ -369,15 +402,7 @@ void printSetting(char* keys)
 	using std::cin;
 	system("cls");
 	const char* KORNUM[6] = { "첫", "두", "세", "네", "다섯", "여섯" };
-	std::string title = "키변경";
-	std::string toMain = "<- 메인메뉴로";
-	std::string descripton = "바꿀 키를 누르세요";
-	setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
-	cout << title;
-	setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
-	cout << descripton;
-	setInputPo(79 - toMain.length(), 34);
-	cout << toMain;
+	printSettingDescrip();
 	for (int i = 0; i < 6; i++)
 	{
 		setInputPo(79 / 2 - 18, 2*i + 8);
@@ -397,12 +422,7 @@ void printSetting(char* keys)
 			while (cin.get() != '\n')
 				continue;
 			system("cls");
-			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
-			cout << title;
-			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
-			cout << descripton;
-			setInputPo(79 - toMain.length(), 34);
-			cout << toMain;
+			printSettingDescrip();
 			for (int i = 0; i < 6; i++)
 			{
 				setInputPo(79 / 2 - 18, 2 * i + 8);
@@ -421,12 +441,7 @@ void printSetting(char* keys)
 			while (cin.get() != '\n')
 				continue;
 			system("cls");
-			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
-			cout << title;
-			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
-			cout << descripton;
-			setInputPo(79 - toMain.length(), 34);
-			cout << toMain;
+			printSettingDescrip();
 			for (int i = 0; i < 6; i++)
 			{
 				setInputPo(79 / 2 - 18, 2 * i + 8);
@@ -445,12 +460,7 @@ void printSetting(char* keys)
 			while (cin.get() != '\n')
 				continue;
 			system("cls");
-			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
-			cout << title;
-			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
-			cout << descripton;
-			setInputPo(79 - toMain.length(), 34);
-			cout << toMain;
+			printSettingDescrip();
 			for (int i = 0; i < 6; i++)
 			{
 				setInputPo(79 / 2 - 18, 2 * i + 8);
@@ -469,12 +479,7 @@ void printSetting(char* keys)
 			while (cin.get() != '\n')
 				continue;
 			system("cls");
-			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
-			cout << title;
-			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
-			cout << descripton;
-			setInputPo(79 - toMain.length(), 34);
-			cout << toMain;
+			printSettingDescrip();
 			for (int i = 0; i < 6; i++)
 			{
 				setInputPo(79 / 2 - 18, 2 * i + 8);
@@ -493,12 +498,7 @@ void printSetting(char* keys)
 			while (cin.get() != '\n')
 				continue;
 			system("cls");
-			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
-			cout << title;
-			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
-			cout << descripton;
-			setInputPo(79 - toMain.length(), 34);
-			cout << toMain;
+			printSettingDescrip();
 			for (int i = 0; i < 6; i++)
 			{
 				setInputPo(79 / 2 - 18, 2 * i + 8);
@@ -517,12 +517,7 @@ void printSetting(char* keys)
 			while (cin.get() != '\n')
 				continue;
 			system("cls");
-			setInputPo(79 / 2 - ((title.length() / 2) * 2), 2);
-			cout << title;
-			setInputPo(79 / 2 - ((descripton.length() / 2) * 2), 6);
-			cout << descripton;
-			setInputPo(79 - toMain.length(), 34);
-			cout << toMain;
+			printSettingDescrip();
 			for (int i = 0; i < 6; i++)
 			{
 				setInputPo(79 / 2 - 18, 2 * i + 8);

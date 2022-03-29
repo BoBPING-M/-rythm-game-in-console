@@ -16,7 +16,7 @@ extern bool gameIsRunning;
 void keyInput(std::list<Block*>* nw, int ix, int& score, int& combo, char k, std::mutex& m, Life& lf)
 {
 	clock_t printKeyTime = LONG_MAX;
-	Mci* boom = setBoom((LPCWSTR)L"D:\\OneDrive\\C++\\fake rythm star\\fake rythm star\\effectS\\Boom.mp3");
+	Mci* boom = setBoom((LPCWSTR)L".\\data\\sound\\Boom.mp3");
 	juge jg = juge::nope;
 	while (1)
 	{

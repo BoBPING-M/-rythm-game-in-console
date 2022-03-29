@@ -26,7 +26,7 @@ int main()
 	using std::thread;
 
 	WNDCLASS wndclass;
-	SetConsoleTitle(lpszClass);
+	SetConsoleTitle(L"조잡한 리듬게임");
 	hinstance = GetModuleHandle(NULL);
 
 	wndclass.cbClsExtra = 0;

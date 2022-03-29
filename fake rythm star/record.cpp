@@ -21,8 +21,7 @@ bool Record::inputInfo(int score)
 	cout << "당신의 점수 : " << score;
 	setInputPo(xSize / 2 - 5, ySize / 2 + 1);
 	cout << "Press Enter!";
-	FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE)); //GetAsyncKeyState 버퍼 비워줌
-	while (cin.get() != '\n')
+	while ((GetAsyncKeyState(VK_RETURN) & 0x8001) != 0x8001)
 	{
 		continue;
 	}
@@ -33,6 +32,7 @@ bool Record::inputInfo(int score)
 		setInputPo(i, ySize / 2 + 1);
 		cout << ' ';
 	}
+	FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE)); //GetAsyncKeyState 버퍼 비워줌
 	setInputPo(xSize / 2 - 5, ySize / 2);
 	cout << "이름 입력(3글자) : ";
 	std::getline(cin, temp_n);
@@ -80,7 +80,7 @@ void writeRecord(int score, std::vector<Record> & rec)
 	rec.push_back(temp);
 	std::sort(rec.begin(), rec.end(), recordCompare);
 	std::ofstream fout;
-	fout.open("D:\\OneDrive\\C++\\fake rythm star\\fake rythm star\\record\\record.dat", ios_base::out | ios_base::trunc | ios_base::binary);
+	fout.open(".\\data\\record\\record.dat", ios_base::out | ios_base::trunc | ios_base::binary);
 	if (!fout.is_open())
 	{
 		std::cerr << "기록 저장 파일을 열지 못했습니다.\n";
@@ -101,7 +101,7 @@ void readRecord(std::vector<Record>& rec)
 	std::string temp_n; //이름 임시 객체
 	temp_n.resize(MAX_NAME_LEN + 1);
 	int temp_s; //점수 임시 변수
-	fin.open("D:\\OneDrive\\C++\\fake rythm star\\fake rythm star\\record\\record.dat", ios_base::in | ios_base::binary);
+	fin.open(".\\data\\record\\record.dat", ios_base::in | ios_base::binary);
 	if (!fin.is_open())
 	{
 		return;

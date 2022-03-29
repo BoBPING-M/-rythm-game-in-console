@@ -30,8 +30,6 @@ void playingBoom(int dwID, MCI_PLAY_PARMS* playBoom);
 
 void goToStartBoom(int dwID, MCI_SEEK_PARMS* seekBoom);
 
-void endBgm(std::mutex& m);
-
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam); //노래 관리용
 
 

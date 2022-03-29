@@ -14,7 +14,7 @@ extern HINSTANCE hinstance;
 
 void setBgm() //브금 세팅용 함수
 {
-	openBGM.lpstrElementName = (LPCWSTR)L"D:\\OneDrive\\C++\\fake rythm star\\fake rythm star\\TEST\\TEST.mp3"; //파일 오픈 구조체에 파일 경로 지정 
+	openBGM.lpstrElementName = (LPCWSTR)L".\\data\\sound\\music.mp3"; //파일 오픈 구조체에 파일 경로 지정 
 	openBGM.lpstrDeviceType = (LPCWSTR)L"mpegvideo"; //파일 형식 지정(mp3 지정)
 	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD_PTR)&openBGM); //openBGM 구조체의 정보로 노래 오픈
 	dwID = openBGM.wDeviceID;//openBGM의 디바이스 아이디 저장
@@ -55,18 +55,6 @@ void goToStartBoom(int dwID, MCI_SEEK_PARMS * seekBoom)
 	mciSendCommand(dwID, MCI_SEEK, MCI_SEEK_TO_START, (DWORD_PTR)seekBoom); //노래의 시작 지점으로 돌리는 옵션
 }
 
-void endBgm(std::mutex & m) //음악이 끝까지 정리했을시 게임 종료
-{
-	while (gameIsRunning == true)
-	{
-		if (playBGM.dwCallback == MCI_NOTIFY_SUCCESSFUL)
-		{
-			m.lock();
-			gameIsRunning = false;
-			m.unlock();
-		}
-	}
-}
 
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT imessage, WPARAM wparam, LPARAM lparam)

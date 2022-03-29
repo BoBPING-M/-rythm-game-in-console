@@ -30,7 +30,7 @@ void gameStart(char * keys, std::vector<Record> &rec)
 	std::string name = "MSG"; //이번 게임 이름
 	MSG msg;
 
-	readBlock("data.dat", wait);
+	readBlock(".\\data\\data.dat", wait);
 	std::mutex m; //쓰레드들의 데이터 침범?을 막기위한 뮤텍스
 	thVector key; //키 입력을 위한 쓰레드들의 배열
 	thVector playing;//속도에 따른 블록 이동 스레드 배열
@@ -58,16 +58,11 @@ void gameStart(char * keys, std::vector<Record> &rec)
 		making.push_back(std::thread(GoBlock, now, wait, i, std::ref(m)));
 	}
 
-	while (GetMessage(&msg, winhwnd, 0, 0))
+	while (PeekMessage(&msg, winhwnd, 0, 0, PM_REMOVE) || gameIsRunning == true)
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-		if (gameIsRunning == false)
-		{
-			break;
-		}
 	}
-
 
 	//게임 종료
 	for (int i = 0; i < 6; i++)//쓰레드 종료
@@ -76,6 +71,8 @@ void gameStart(char * keys, std::vector<Record> &rec)
 		key[i].join();
 		playing[i].join(); //종료가 안됨 1번부터
 	}
+
+
 	//gameDone.join();
 	stopBgm();
 	resetBgm();
